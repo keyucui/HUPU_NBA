@@ -19,6 +19,10 @@ def hupuNBAMainPage(url):
         return -1
 
 def titleHref(results):
+    '''
+    :param results:   抓取的结果
+    :return:   贴名与链接
+    '''
     pat_answer_num = '''\d+亮\d+回复'''
     pat_answer_num = re.compile(pat_answer_num)
     pat_title = '''title=".+">\n<span'''
@@ -29,6 +33,8 @@ def titleHref(results):
     titles = [pat_title.findall(item)[0][7:-8] for item in results if not None]
     hrefs = [url[:-8] + pat_url.findall(item)[0][6:-1] for item in results if not None]
     answer_num = [pat_answer_num.findall(item)[0] for item in results]
+
+
     # print(answer_num)
     # print(answer_num[0])
     # for item in titles:
@@ -37,6 +43,7 @@ def titleHref(results):
     #     print(item)
     # hrefs.pop()
     # dic = {}
+
     if len(titles) == len(hrefs):
     #     for i in range(len(titles)):
     #         dic[titles[i]] = hrefs[i]
@@ -59,8 +66,8 @@ def reviewsPage(url):
         pat_all = re.compile(pat_reviews)
         results = pat_all.findall(data)
         for item in results:
-            print(item)
-            print()
+            print(item.strip('\n').strip('</p>').strip('</blockquote><br>').strip('<p>'))
+            # print()
         return results
 
     except Exception as e:
@@ -76,7 +83,7 @@ if __name__=='__main__':
     if titles!=1 and hrefs!=-1:
         for ii in range(len(titles)):
             print(titles[ii] + ': ' + hrefs[ii])
-            print()
+            # print()
     print(hrefs[0])
     reviewsPage(hrefs[0])
     print('\n总共花费了%f秒'%(time.time() - t))
